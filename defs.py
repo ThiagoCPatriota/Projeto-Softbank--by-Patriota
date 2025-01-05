@@ -58,19 +58,18 @@ def Login(page):
         elif not cpf.value:
             mensagem.value = 'Porfavor, Insira uma senha válida!'
         else:
-            usuario = User.get_or_none(User.email == email.value & User.senha == senha.value & User.cpf == cpf.value)
 
-            if usuario:
+            try:
+                User.get_or_none(User.email == email.value & User.senha == senha.value & User.cpf == cpf.value)
                 conta = Account.get(Account.email == email.value)
                 mensagem.value = 'Login Realizado com Sucesso!'
                 mensagem.color = 'green'
                 Menu_Principal(page, conta)
                 page.add(mensagem)
-            else:
-                mensagem.value = 'Usuário ou senha inválidos!'
+            except Exception as ex:
+                mensagem.value = f'Erro ao cadastrar: {ex}'
                 mensagem.color = 'red'
         page.update()
-
     page.controls.clear()
     page.controls.append(ft.Text('LOGIN: '))
     page.add(
